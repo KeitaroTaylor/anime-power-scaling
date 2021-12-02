@@ -1,0 +1,66 @@
+*{
+    box-sizing: border-box;
+}
+.clearfix:after {
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+}
+.clear {
+	clear: both;
+}
+.hidden {
+    visibility: hidden;
+}
+.none {
+    display: none;
+}
+body a {
+    text-decoration: none;
+    color: blueviolet;
+}
+body a:hover {
+    color: inherit;
+}
+.pborder {
+    border: 10px solid blueviolet;
+}
+
+
+
+.roundedEdges {
+    border-radius: 15px;
+}
+.alignLeft {
+    margin-right: 30%;
+}
+.alignRight {
+    margin-left: 30%;
+}
+.card {
+    width: 270px!important;
+    padding: 5px;
+    float: left;
+}
+.card:hover {
+    background-color: blueviolet!important;
+}
+.cardImg {
+    width: 250px;
+    height: 250px;
+    margin: auto;
+    border-radius: 5px;
+}
+.center {
+    justify-content: center;
+}
+.winner {
+    border:  10px solid blueviolet!important;
+    padding: 0px;
+}
+.loser {
+    border: none!important;
+}

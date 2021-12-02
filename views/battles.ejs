@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="1style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/764227ccf6.js" crossorigin="anonymous"></script>
+    <title>Battles | Anime Power Scaling</title>
+</head>
+<body class="bg-dark text-light">
+    <div class="container my-3">
+        <nav class="navbar d-flex justify-content-center">
+            <div class="d-flex justify-content-center">
+                <span class="text-light mx-3">-----></span>
+                <a href="/" class="mx-3">Home</a>
+                <a href="/data" class="mx-3">Databook</a>
+                <a href="/rankings" class="mx-3">Rankings</a>
+                <a href="/battles" class="mx-3">Battles</a>
+                <% if (user) { %>
+                <a href="/profile" class="mx-3">Profile</a>
+                <% } else { %>
+                <a href="/login" class="mx-3">Login/Signup</a>
+                <% } %>
+                <span class="text-light mx-3"><-----</span>
+            </div>
+        </nav>
+
+        <main class="text-center my-5 p-5">
+            <h1 class="text-warning">Anime Power Scaling</h1>
+            <h2>Battles</h2>
+            <p>Here you can vote on and discuss a head-to-head battle between two characters.</p>
+        </main>
+
+        <section class="bg-warning text-dark text-center p-5">
+            <h1 class="mb-3">How Do Battles Work?</h1>
+            <div>
+                <span>Battles are simply two characters whose strengths are being compared by our users. Each user has the opportunity to vote which character they believe would win if they went head-to-head. Each battle works like a forum, where users can comment their reasonings for their vote, and respond to other users who have done the same. After users have voted, the </span><a href="/rankings">global rankings</a><span> will be updated accordingly.</span>
+                <p class="mt-3">If you want to view any data or sources for a character, please click their image or find them in the <a href="/data">databook</a>.</p>
+            </div>
+
+            <h2 class="m-3">Select Two Characters</h2>
+            <form action="/battle" method="get">
+                <div class="parentSelect">
+                    <select name="ninjaOne" id="ninjaOne" class="mx-1">
+                        <option value="">Select Character 1</option>
+                        <% for (i=0; i<ninja.length; i++) { %>
+                        <option value="<%= ninja[i].name %>"><%=ninja[i].name%></option>
+                        <% } %>
+                    </select>
+
+                    <select name="ninjaTwo" id="ninjaTwo" class="mx-1">
+                        <option value="">Select Character 2</option>
+                        <% for (i=0; i<ninja.length; i++) { %>
+                        <option value="<%= ninja[i].name %>"><%=ninja[i].name%></option>
+                        <% } %>
+                    </select>
+                </div>
+                <button id="battle" class="mt-3 btn btn-outline-dark">Battle</button>
+            </form>
+        </section>
+
+        <% let onePercent = Math.round(100 * battles[0].n1votes / (battles[0].n1votes + battles[0].n2votes)) %>
+            <% let twoPercent = Math.round(100 * battles[0].n2votes / (battles[0].n1votes + battles[0].n2votes)) %>
+
+            <% if (battles[0].n1votes == 0 && battles[0].n2votes == 0) { %>
+                <% onePercent = 50 %>
+                <% twoPercent = 50 %>
+            <% } %>
+
+        <% ninja.sort((a, b) => a.name > b.name ? 1 : -1) %>
+
+        <% let first %>
+        <% let second %>
+        <% if (onePercent > twoPercent) { %>
+            <% first = 'winner' %>
+            <% second = 'loser' %>
+        <% } else if (twoPercent > onePercent) { %>
+            <% second = 'winner' %>
+            <% first = 'loser' %>
+        <% } %>
+
+        <% if (battles.length === 1) { %>
+        <section class="p-5 text-center">
+            <h2 class="mb-3"><%=battles[0].n1%> vs <%=battles[0].n2%></h2>
+            <div class="d-flex justify-content-center">
+            <% for (i=0; i<ninja.length; i++) { %>
+                    <% if (battles[0].n1 === ninja[i].name) { %>
+                        <div class="card m-3 text-center text-dark bg-warning <%=first%>">
+                            <a href="/data/<%=ninja[i]._id%>">
+                                <img class="cardImg" src="<%=ninja[i].img%>" class="card-img-top">
+                            </a>
+                            <div class="card-body">
+                                <h5 id="n1name"><%=ninja[i].name%></h5>
+                                <p id="onePercent" class="text-center"><%= onePercent %>%</p>
+                                <input type="hidden" id="n1amount" value="<%= battles[0].n1votes %>"></input>
+                                <div class="btn btn-outline-dark mb-3 naruto vote">VOTE</div>
+                            </div>
+                        </div>
+                    <% } %>
+                    <% if (battles[0].n2 === ninja[i].name) { %>
+                        <div class="card m-3 text-center text-dark bg-warning <%=second%>">
+                            <a href="/data/<%=ninja[i]._id%>">
+                                <img class="cardImg" src="<%=ninja[i].img%>" class="card-img-top">
+                            </a>
+                            <div class="card-body">
+                                <h5 id="n2name"><%=ninja[i].name%></h5>
+                                <p id="twoPercent" class="text-center"><%= twoPercent %>%</p>
+                                <input type="hidden" id="n2amount" value="<%= battles[0].n2votes %>"></input>
+                                <div class="btn btn-outline-dark mb-3 naruto vote">VOTE</div>
+                            </div>
+                        </div>
+                    <% } %>
+                <% } %>
+            </div>
+        </section>
+
+        <section class="bg-warning text-dark p-5">
+            <h2 class="text-center">Comments</h2>
+            <form action="/comment" method="post" class="d-flex justify-content-center">
+                <input type="text" name="comment" placeholder="Share your thoughts!">
+                <input type="text" name="battle" value="<%= battles[0]._id %>" class="hidden">
+                <button type="submit" class="btn btn-outline-dark">Post Comment</button>
+            </form>
+
+            <div class="list-group mt-3">
+            <% for (let i=comments.length - 1; i>=0; i--) { %>
+                <div class="list-group-item">
+                <% for (let j=0; j<users.length; j++) { %>
+                    <% if (String(comments[i].userId) == String(users[j]._id)) { %>
+                    <i class="fa fa-thumbs-up"></i>
+                    <span><%= comments[i].likes %></span>
+                    <span>||</span>
+                    <strong><%= users[j].local.username %>:</strong>
+                    <span><%= comments[i].comment %></span>
+                    <input type="hidden" value="<%=comments[i]._id%>">
+                    <% } %>
+                <% } %>
+                </div>
+            <% } %>
+            </div>
+        </section>
+        <% } %>
+
+        <nav class="navbar d-flex justify-content-center mt-3">
+            <div class="d-flex justify-content-center">
+                <span class="text-light mx-3">-----></span>
+                <a href="/" class="mx-3">Home</a>
+                <a href="/rankings" class="mx-3">Rankings</a>
+                <a href="/battles" class="mx-3">Battles</a>
+                <% if (user) { %>
+                <a href="/Profile" class="mx-3">Profile</a>
+                <% } else { %>
+                <a href="/login" class="mx-3">Login/Signup</a>
+                <% } %>
+                <span class="text-light mx-3"><-----</span>
+            </div>
+        </nav>
+    </div>
+    <script src="battle.js"></script>
+</body>
+</html>
